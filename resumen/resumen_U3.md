@@ -15,7 +15,7 @@ Una imagen Docker es una plantilla de solo lectura que contiene todo lo necesari
 
 ### Características
 
-- Está formada por capas (*layers*).
+- Está formada por capas (_layers_).
 - Las capas pueden reutilizarse en otras imágenes.
 - Una imagen puede crear muchos contenedores.
 - Las imágenes no se modifican al ejecutar contenedores.
@@ -31,7 +31,7 @@ Un contenedor es una instancia ejecutable de una imagen.
 - Puede crearse, arrancarse, detenerse y eliminarse.
 - Dispone de procesos y red aislados.
 - Añade una capa de escritura sobre la imagen.
-- Tiene un identificador único (*Container ID*).
+- Tiene un identificador único (_Container ID_).
 
 Un contenedor puede identificarse mediante:
 
@@ -45,12 +45,12 @@ Si no se especifica un nombre, Docker genera uno automáticamente.
 
 ## Imagen vs Contenedor
 
-| Imagen | Contenedor |
-|----------|----------|
-| Plantilla | Instancia |
-| Solo lectura | Tiene capa de escritura |
-| Puede generar varios contenedores | Se crea desde una imagen |
-| Permanente | Puede estar activo o detenido |
+| Imagen                            | Contenedor                    |
+| --------------------------------- | ----------------------------- |
+| Plantilla                         | Instancia                     |
+| Solo lectura                      | Tiene capa de escritura       |
+| Puede generar varios contenedores | Se crea desde una imagen      |
+| Permanente                        | Puede estar activo o detenido |
 
 ---
 
@@ -67,39 +67,33 @@ Esto permite:
 - Reutilizar componentes comunes.
 - Aprovechar la caché durante la construcción de imágenes.
 
----
-
-### OverlayFS y overlay2
-
-#### OverlayFS
-
-Sistema de archivos por capas integrado en Linux.
-
-#### overlay2
-
-Driver de almacenamiento utilizado por Docker para gestionar imágenes y contenedores.
-
-Consultar la configuración:
+### Consultar la configuración:
 
 ```bash
 docker info
 ```
 
+Puedes ampliar la tabla con los campos más importantes que muestra `docker info`:
+
 Información importante:
 
-| Campo | Significado |
-|---------|-------------|
-| Storage Driver | Driver de almacenamiento utilizado |
-| Docker Root Dir | Directorio donde Docker almacena sus datos |
-
-Salida habitual:
-
-```text
-Storage Driver: overlay2
-Docker Root Dir: /var/lib/docker
-```
-
----
+| Campo                | Significado                                                                                            |
+| -------------------- | ------------------------------------------------------------------------------------------------------ |
+| Server Version       | Versión del motor Docker instalado.                                                                    |
+| Storage Driver       | Driver de almacenamiento utilizado para gestionar las capas de imágenes y contenedores.                |
+| Docker Root Dir      | Directorio donde Docker almacena sus datos, como imágenes, contenedores y volúmenes.                   |
+| Kernel Version       | Versión del núcleo del sistema operativo.                                                              |
+| Operating System     | Sistema operativo sobre el que se ejecuta el motor Docker.                                             |
+| Architecture         | Arquitectura del procesador (por ejemplo, x86_64 o aarch64).                                           |
+| CPUs                 | Número de procesadores lógicos disponibles para Docker.                                                |
+| Total Memory         | Memoria RAM total disponible para Docker.                                                              |
+| Containers           | Número total de contenedores existentes.                                                               |
+| Running              | Número de contenedores que están en ejecución.                                                         |
+| Paused               | Número de contenedores pausados.                                                                       |
+| Stopped              | Número de contenedores detenidos.                                                                      |
+| Images               | Número de imágenes almacenadas localmente.                                                             |
+| Registry             | Registro de imágenes utilizado por defecto (normalmente Docker Hub).                                   |
+| Live Restore Enabled | Indica si los contenedores pueden seguir ejecutándose cuando se reinicia o detiene el servicio Docker. |
 
 ## 3. Tipos de almacenamiento
 
@@ -252,6 +246,9 @@ Crea un contenedor sin arrancarlo.
 
 ```bash
 docker create ubuntu
+docker start ID
+
+# docker run equivalente a docker create + docker start
 ```
 
 Estado:
@@ -259,18 +256,6 @@ Estado:
 ```text
 Created
 ```
-
----
-
-### docker start
-
-Arranca un contenedor existente.
-
-```bash
-docker start contenedor
-```
-
----
 
 ## 6. Caso práctico: Hello World
 
@@ -291,77 +276,55 @@ Proceso:
 
 ## 7. Listar contenedores
 
-#### Contenedores activos
-
 ```bash
+# Contenedores activos
 docker ps
-```
 
-#### Todos los contenedores
-
-```bash
+#Todos los contenedores
 docker ps -a
-```
 
-#### Solo IDs
-
-```bash
-docker ps -q
-```
-
-#### Último contenedor creado
-
-```bash
+# Último contenedor creado
 docker ps -l
+
+# Solo IDs, es util para usarlo en scripts
+docker ps -q
+
+# borrar todos los contenedores
+docker rm $(docker ps -aq)
+
 ```
 
 ### Estados habituales
 
-| Estado | Significado |
-|----------|----------|
-| Created | Creado |
-| Running | En ejecución |
-| Exited | Detenido |
-| Paused | Pausado |
+| Estado     | Significado   |
+| ---------- | ------------- |
+| Created    | Creado        |
+| Running    | En ejecución  |
+| Exited     | Detenido      |
+| Paused     | Pausado       |
 | Restarting | Reiniciándose |
 
 ---
 
 ## 8. Control de contenedores
 
-#### Arrancar
-
 ```bash
+# Arrancar un contenedor detenido
 docker start ID
-```
 
-#### Detener
-
-```bash
+# Detener un contenedor de forma ordenada
 docker stop ID
-```
 
-#### Reiniciar
-
-```bash
+# Reiniciar un contenedor
 docker restart ID
-```
 
-#### Pausar
-
-```bash
+# Pausar los procesos de un contenedor
 docker pause ID
-```
 
-#### Reanudar
-
-```bash
+# Reanudar un contenedor pausado
 docker unpause ID
-```
 
-#### Forzar parada
-
-```bash
+# Forzar la detención inmediata de un contenedor
 docker kill ID
 ```
 
@@ -393,100 +356,86 @@ La salida se muestra en formato JSON.
 
 Permite ejecutar procesos en contenedores en funcionamiento.
 
-#### Abrir Bash
-
 ```bash
+# Abrir una terminal Bash interactiva dentro del contenedor
 docker exec -it contenedor bash
-```
 
-#### Abrir Shell
-
-```bash
+# Abrir una terminal Shell interactiva dentro del contenedor
 docker exec -it contenedor sh
-```
 
-#### Ejecutar un comando
-
-```bash
+# Ejecutar un comando dentro del contenedor (listar el directorio raíz)
 docker exec contenedor ls /
 ```
 
 ### Opciones más utilizadas
 
-| Opción | Función |
-|----------|----------|
-| `-i` | Mantiene la entrada estándar |
-| `-t` | Crea una terminal virtual |
-| `-d` | Ejecuta en segundo plano |
-| `-e` | Define variables de entorno |
-| `-u` | Usuario de ejecución |
-| `-w` | Directorio de trabajo |
+| Opción | Función                                                                                            |
+| ------ | -------------------------------------------------------------------------------------------------- |
+| `-i`   | Mantiene abierta la entrada estándar (`stdin`), permitiendo introducir datos al proceso.           |
+| `-t`   | Asigna una terminal virtual (TTY) al proceso, proporcionando una interfaz de terminal interactiva. |
+| `-d`   | Ejecuta el contenedor en segundo plano, sin bloquear la terminal actual.                           |
+| `-e`   | Define variables de entorno dentro del contenedor.                                                 |
+| `-u`   | Especifica el usuario o UID con el que se ejecutará el proceso dentro del contenedor.              |
+| `-w`   | Establece el directorio de trabajo desde el que se ejecutará el proceso dentro del contenedor.     |
 
 ---
 
 ## 11. Copiar archivos
 
-#### Del contenedor al anfitrión
+En `docker cp`, `contenedor:` identifica el contenedor Docker desde el que se copia o al que se copia un archivo.
+
+Tiene el formato:
 
 ```bash
-docker cp contenedor:/tmp/prueba .
+contenedor:ruta
 ```
 
-#### Del anfitrión al contenedor
+- `contenedor`: nombre o ID del contenedor.
+- `:`: separador entre el contenedor y la ruta.
+- `ruta`: ubicación del archivo o directorio dentro del contenedor.
+
 
 ```bash
+# Copiar un archivo o directorio del contenedor al anfitrión
+docker cp contenedor:/tmp/prueba .
+
+# Copiar un archivo o directorio del anfitrión al contenedor
 docker cp archivo.txt contenedor:/tmp/
 ```
-
 Funciona con contenedores activos o detenidos.
-
----
 
 ## 12. Attach vs Exec
 
-### docker attach
-
-Conecta la terminal al proceso principal del contenedor.
-
 ```bash
+# docker attach: conecta la terminal al proceso principal del contenedor
 docker attach contenedor
-```
 
-### docker exec
-
-Crea un proceso adicional dentro del contenedor.
-
-```bash
+# docker exec: crea un proceso adicional dentro de un contenedor en ejecución
 docker exec -it contenedor bash
 ```
 
 ### Diferencia
 
-| attach | exec |
-|----------|----------|
-| Se conecta al proceso principal | Ejecuta un nuevo proceso |
-| No crea procesos nuevos | Crea procesos adicionales |
-| Más limitado | Más flexible |
+| attach                          | exec                      |
+| ------------------------------- | ------------------------- |
+| Se conecta al proceso principal | Ejecuta un nuevo proceso  |
+| No crea procesos nuevos         | Crea procesos adicionales |
+| Más limitado                    | Más flexible              |
 
 ---
 
 ## 13. Logs
 
-#### Mostrar registros
+
 
 ```bash
+# Mostrar registros
 docker logs contenedor
-```
 
-#### Seguir registros en tiempo real
-
-```bash
+# Seguir registros en tiempo real
 docker logs -f contenedor
-```
 
-#### Últimas líneas
-
-```bash
+# Últimas líneas
 docker logs --tail 10 contenedor
 ```
 
@@ -508,23 +457,23 @@ No:
 
 ## 15. Comandos fundamentales
 
-| Acción | Comando |
-|----------|----------|
-| Buscar imágenes | `docker search` |
-| Descargar imagen | `docker pull` |
-| Ver imágenes | `docker images` |
-| Crear y arrancar | `docker run` |
-| Crear sin arrancar | `docker create` |
-| Arrancar existente | `docker start` |
-| Detener | `docker stop` |
-| Reiniciar | `docker restart` |
-| Ver contenedores | `docker ps -a` |
-| Inspeccionar | `docker inspect` |
-| Ejecutar comandos | `docker exec` |
-| Ver logs | `docker logs` |
-| Copiar archivos | `docker cp` |
-| Renombrar | `docker rename` |
-| Crear volumen | `docker volume create` |
+| Acción             | Comando                |
+| ------------------ | ---------------------- |
+| Buscar imágenes    | `docker search`        |
+| Descargar imagen   | `docker pull`          |
+| Ver imágenes       | `docker images`        |
+| Crear y arrancar   | `docker run`           |
+| Crear sin arrancar | `docker create`        |
+| Arrancar existente | `docker start`         |
+| Detener            | `docker stop`          |
+| Reiniciar          | `docker restart`       |
+| Ver contenedores   | `docker ps -a`         |
+| Inspeccionar       | `docker inspect`       |
+| Ejecutar comandos  | `docker exec`          |
+| Ver logs           | `docker logs`          |
+| Copiar archivos    | `docker cp`            |
+| Renombrar          | `docker rename`        |
+| Crear volumen      | `docker volume create` |
 
 # 16. ¿Por qué unos contenedores finalizan y otros siguen funcionando?
 
@@ -533,7 +482,6 @@ Una idea fundamental de Docker es que:
 > Un contenedor permanece en ejecución mientras su proceso principal siga ejecutándose.
 
 Cuando ese proceso termina, Docker detiene automáticamente el contenedor.
-
 
 ## Ejemplo 1: Un contenedor que termina automáticamente
 
@@ -557,7 +505,6 @@ Proceso principal → termina
 Contenedor → Exited
 ```
 
-
 ## Ejemplo 2: Un contenedor que sigue funcionando
 
 ```bash
@@ -571,7 +518,6 @@ Proceso principal → sigue activo
          ↓
 Contenedor → Running
 ```
-
 
 ## Ejemplo 3: Ubuntu con terminal interactiva
 
@@ -612,12 +558,10 @@ Contenedor → Exited
 Podemos arrancar un contenedor ejecutando un proceso que nunca finalice:
 
 ```bash
+# Mantener un contenedor activo con sleep, que espera un tiempo indefinido
 docker run ubuntu sleep infinity
-```
 
-o
-
-```bash
+# Mantener un contenedor activo con tail, que espera indefinidamente a que se escriban datos en un archivo
 docker run ubuntu tail -f /dev/null
 ```
 
@@ -633,11 +577,9 @@ Contenedor → Running
 
 Si se apaga o reinicia el anfitrión (la máquina donde se está ejecutando Docker), todos los contenedores se detienen porque sus procesos dejan de ejecutarse. Sin embargo, los contenedores no se eliminan y continúan almacenados en el sistema, normalmente en estado `Exited` cuando el equipo vuelve a arrancar. Los datos también se conservan, especialmente si están almacenados en volúmenes. Para que un contenedor vuelva a iniciarse automáticamente tras reiniciar el sistema, puede configurarse una política de reinicio mediante el parámetro `--restart`.
 
-
 ## Políticas de reinicio (`--restart`)
 
 Docker permite configurar el comportamiento de un contenedor cuando se detiene o cuando se reinicia el anfitrión.
-
 
 ```bash
 docker run -d --restart unless-stopped --name web nginx
@@ -645,16 +587,15 @@ docker run -d --restart unless-stopped --name web nginx
 
 Las políticas más habituales son:
 
-| Política | Comportamiento |
-|-----------|-----------|
-| `no` | No reinicia automáticamente (valor por defecto). |
-| `always` | Reinicia siempre el contenedor. |
+| Política         | Comportamiento                                                   |
+| ---------------- | ---------------------------------------------------------------- |
+| `no`             | No reinicia automáticamente (valor por defecto).                 |
+| `always`         | Reinicia siempre el contenedor.                                  |
 | `unless-stopped` | Reinicia automáticamente salvo que se haya detenido manualmente. |
-| `on-failure` | Reinicia únicamente si el proceso termina con error. |
+| `on-failure`     | Reinicia únicamente si el proceso termina con error.             |
 
 La política de reinicio también puede modificarse en contenedores ya existentes mediante:
 
 ```bash
 docker update --restart unless-stopped nombreContenedor
 ```
-
