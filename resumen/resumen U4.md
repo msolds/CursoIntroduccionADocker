@@ -439,7 +439,7 @@ Al iniciar el contenedor, se ejecutaría:
 cat /etc/passwd
 ```
 
-**Importante:** Si al ejecutar `docker run` se proporcionan argumentos adicionales, estos sustituyen los valores definidos en `CMD`, manteniendo el `ENTRYPOINT`.
+**Importante:** Si al ejecutar `docker run` se proporcionan argumentos adicionales, estos **sustituyen** los valores definidos en `CMD`, manteniendo el `ENTRYPOINT`.
 
 ```
 docker run mi-imagen /etc/hosts
@@ -509,7 +509,7 @@ Estas variables pueden utilizarse en instrucciones posteriores y dentro de la ap
 
 #### 11. ARG
 
-Define variables que se pueden proporcionar durante la construcción de la imagen.
+Define variables que se pueden proporcionar durante la **construcción** de la imagen.
 
 ```
 ARG VERSION=1.0
